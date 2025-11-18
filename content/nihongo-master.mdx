@@ -1,0 +1,201 @@
+---
+title: "Membangun Nihongo Master: Platform Pembelajaran Bahasa Jepang Berbasis Ilmu Pengetahuan"
+publishedAt: "2025-06-14"
+summary: "Cerita lengkap tentang bagaimana saya membangun Nihongo Master, platform pembelajaran bahasa Jepang berbasis metodologi ilmiah untuk persiapan JLPT."
+---
+
+# Membangun Nihongo Master: Platform Pembelajaran Bahasa Jepang Berbasis Ilmu Pengetahuan
+
+Halo teman-teman! Selamat datang di blog saya. Hari ini, saya ingin berbagi pengalaman membangun proyek pribadi saya yang paling menantang dan memuaskan sejauh ini: **Nihongo Master**. Ini adalah platform pembelajaran bahasa Jepang yang dirancang khusus untuk persiapan **JLPT (Japanese Language Proficiency Test)** dengan menggunakan pendekatan yang berbasis ilmu pengetahuan tentang pembelajaran manusia.
+
+Mari kita bahas step-by-step bagaimana proyek ini terwujud, mulai dari ide awal hingga peluncurannya.
+
+---
+
+## 🎌 Latar Belakang: Mengapa Nihongo Master Dibuat?
+
+Sebagai seseorang yang tertarik dengan bahasa Jepang, saya sering kesulitan menemukan platform belajar yang memadukan metodologi ilmiah dengan pengalaman pengguna yang menyenangkan. Banyak aplikasi pembelajaran hanya berfokus pada hafalan kosakata atau grammar dasar, tanpa memanfaatkan teknik-teknik ilmiah seperti:
+
+- **Spaced repetition**,
+- **Active recall**,
+- **Interleaving**, dan
+- **Multimodal learning**.
+
+Saat mempersiapkan JLPT N5, saya menyadari bahwa pembelajaran bahasa Jepang membutuhkan pendekatan yang lebih terstruktur, interaktif, dan berbasis bukti penelitian. Dengan latar belakang saya sebagai software engineer, saya memutuskan untuk membangun platform saya sendiri.
+
+**Tujuan utamanya:** membuat pengalaman belajar bahasa Jepang yang efektif, menyenangkan, dan didukung oleh riset ilmiah.
+
+---
+
+## 📝 Step 1: Perencanaan dan Riset (1–2 Minggu)
+
+### Mengidentifikasi Kebutuhan Pengguna
+
+Saya memulai dengan menganalisis struktur JLPT N5–N1, membaca riset tentang metode pembelajaran, termasuk penelitian Ebbinghaus tentang _forgetting curve_, serta mempelajari platform lain seperti Duolingo, Anki, dan Bunpro.
+
+### Merancang Arsitektur dan UI
+
+Saya membuat mockup awal di Figma, meliputi:
+
+- **Study Hub**
+- **Lessons**
+- **Flashcards (3D animated)**
+- **Quizzes**
+
+### Memilih Tech Stack
+
+Saya memilih teknologi yang paling sesuai:
+
+- **Next.js 15**
+- **TypeScript**
+- **Tailwind CSS**
+- **Firebase** (untuk MVP awal)
+- **LocalStorage** (untuk tracking progres)
+
+---
+
+## 📂 Step 2: Setup Proyek dan Struktur Dasar (3–5 Hari)
+
+Setelah menentukan arah, saya memulai inisialisasi proyek:
+
+```bash
+npx create-next-app@latest jlpt-trainer --typescript --tailwind --app
+cd jlpt-trainer
+npm install
+```
+
+```bash
+src/
+├── app/          # Routing & layout
+├── components/   # Reusable UI components
+├── lib/          # Utilities
+└── data/         # JSON-based lesson & quiz data
+
+```
+
+Saya juga menyiapkan:
+
+- **ESLint + Prettier**
+
+- **Turbopack**
+
+- **Vitest + Testing Library**
+
+---
+
+## 🎨 Step 3: Membangun Komponen UI dan Layout (1–2 Minggu)
+
+### Sistem Design
+
+Saya menggunakan:
+
+- **Radix UI untuk komponen dasar**
+- **Tailwind CSS untuk styling cepat**
+- **next-themes untuk dark mode**
+
+### Layout Utama
+
+Saya merancang:
+
+- **Header responsif**
+- **Sidebar opsional**
+- **Footer minimalis**
+
+### Komponen Interaktif
+
+Fokus utama berada pada:
+
+- **FlashcardPlayer dengan animasi flip 3D via Framer Motion**
+- **QuizPlayer**
+- **ProgressTracker dengan localStorage**
+
+---
+
+## 🧠 Step 4: Implementasi Logika Pembelajaran (2–3 Minggu)
+
+### Algoritma Spaced Repetition
+
+Saya mengimplementasikan algoritma interval berbasis performa:
+
+```bash
+const calculateNextReview = (currentInterval: number, performance: number) => {
+if (performance > 0.8) {
+return currentInterval _ 2.5;
+} else if (performance > 0.6) {
+return currentInterval _ 1.5;
+} else {
+return 1;
+}
+};
+```
+
+### Manajemen Data
+
+- **JSON untuk lesson, flashcards, dan quizzes**
+- **Loader dinamis**
+- **Feedback real-time untuk active recall**
+
+---
+
+## 🧪 Step 5: Integrasi dan Testing (1 Minggu)
+
+### Testing
+
+- **Unit tests**
+- **Component tests**
+- **Integration tests**
+
+### Optimasi Performa
+
+- **Code splitting**
+- **Image optimization**
+- **Bundle analysis**
+
+---
+
+## 🚀 Step 6: Deployment dan Launch (3–5 Hari)
+
+Platform dipublikasikan melalui:
+
+- **Vercel Deployment**
+- **CI/CD GitHub Integration**
+- **Monitoring error dan performa**
+
+## ⚠️ Tantangan dan Solusi
+
+### 1. Balancing Complexity vs Usability
+
+Saya menyederhanakan UI tanpa mengorbankan metodologi ilmiah.
+
+### 2. State Management Kompleks
+
+Menggunakan React hooks + localStorage untuk persistensi.
+
+### 3. Konten Pembelajaran
+
+Butuh riset mendalam agar materi JLPT akurat.
+
+---
+
+## ⭐ Hasil Akhir dan Dampaknya
+
+Nihongo Master berhasil mencapai:
+
+- **Lighthouse score 95+**
+- **FCP < 1.5s**
+- **Bundle size < 200KB (gzipped)**
+
+Feedback awal dari pengguna sangat positif dan membantu banyak pelajar memahami materi JLPT dengan lebih terstruktur.
+
+---
+
+## 🎉 Kesimpulan
+
+Membangun Nihongo Master mengajarkan saya banyak hal tentang UX, evidence-based design, dan pengembangan edtech modern.
+
+Proyek ini membuktikan bahwa teknologi dapat membuat pembelajaran bahasa Jepang jauh lebih efektif dan menyenangkan.
+
+Jika Anda tertarik dengan dunia edtech atau sedang belajar bahasa Jepang, saya sangat merekomendasikan untuk mencoba Nihongo Master.
+
+Apa pendapat Anda tentang metodologi pembelajaran ini?
+Silakan bagikan di komentar!
