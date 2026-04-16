@@ -10,7 +10,7 @@ export const DATA = {
   description:
     "a Fullstack Developer who turns complex systems into elegant digital experiences.",
   summary: `From building WebGIS applications to optimizing national-scale financial systems, I’ve grown into a problem-solver at the intersection of technology and impact, with hands-on experience in Angular 18, .NET Core, and Laravel. What began as simple curiosity about how systems interact has evolved into a passion for creating integrated, secure, and data-driven applications, supported by a mindset that values collaboration, continuous learning, and building technology that genuinely makes life easier.`,
-  avatarUrl: "/me.png",
+  avatarUrl: "/me.webp",
   skills: [
     "React",
     "Next.js",
@@ -119,6 +119,44 @@ export const DATA = {
   ],
   projects: [
     {
+      title: "GoTEK",
+      href: "https://gotek.vercel.app",
+      dates: "April 2023 - September 2023",
+      active: true,
+      description:
+        "GoTEK is a personal finance tracker that lets users record transactions via WhatsApp and visualize their spending through a modern web dashboard powered by Next.js and PostgreSQL.",
+      technologies: [
+        "Next.js",
+        "Typescript",
+        "PostgreSQL",
+        "Prisma",
+        "TailwindCSS",
+        "Shadcn UI",
+        "Magic UI",
+        "Stripe",
+        "Cloudflare Workers",
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "https://gotek.vercel.app",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/zendParadox/fe-whatsapp-bot",
+          icon: <Icons.github className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/zendParadox/whatsapp-bot",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+      image: "",
+      video: "/projects/gotek.webm",
+    },
+    {
       title: "Nihongo Master",
       href: "https://nihongo-master-ecru.vercel.app/",
       dates: "Jan 2024 - Feb 2024",
@@ -173,44 +211,7 @@ export const DATA = {
       image: "/siaktif.png",
       video: "",
     },
-    {
-      title: "GoTEK",
-      href: "https://llm.report",
-      dates: "April 2023 - September 2023",
-      active: true,
-      description:
-        "GoTEK is a personal finance tracker that lets users record transactions via WhatsApp and visualize their spending through a modern web dashboard powered by Next.js and PostgreSQL.",
-      technologies: [
-        "Next.js",
-        "Typescript",
-        "PostgreSQL",
-        "Prisma",
-        "TailwindCSS",
-        "Shadcn UI",
-        "Magic UI",
-        "Stripe",
-        "Cloudflare Workers",
-      ],
-      links: [
-        {
-          type: "Website",
-          href: "https://fe-whatsapp-bot.vercel.app/",
-          icon: <Icons.globe className="size-3" />,
-        },
-        {
-          type: "Source",
-          href: "https://github.com/zendParadox/fe-whatsapp-bot",
-          icon: <Icons.github className="size-3" />,
-        },
-        {
-          type: "Source",
-          href: "https://github.com/zendParadox/whatsapp-bot",
-          icon: <Icons.github className="size-3" />,
-        },
-      ],
-      image: "",
-      video: "/projects/gotek.mp4",
-    },
+
     {
       title: "Kopi Senja",
       href: "https://automatic.chat",
