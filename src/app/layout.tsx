@@ -2,6 +2,9 @@ import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SmoothScroll } from "@/components/smooth-scroll";
+import { Preloader } from "@/components/preloader";
+import { CustomCursor } from "@/components/custom-cursor";
+import { GridLines } from "@/components/grid-lines";
 import { DATA } from "@/data/resume";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
@@ -70,6 +73,9 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="light">
           <SmoothScroll>
+            <Preloader />
+            <CustomCursor />
+            <GridLines />
             <TooltipProvider delayDuration={0}>
               {children}
               <Navbar />
