@@ -1,0 +1,72 @@
+---
+title: "Smart Receipt Scanning: Ekstraksi Data Struk Otomatis melalui WhatsApp"
+publishedAt: "2026-04-19"
+summary: "Memanfaatkan kemampuan multimodal Gemini AI untuk membaca foto struk belanja dan mengubahnya menjadi catatan keuangan otomatis di platform GoTEK."
+---
+
+# Smart Receipt Scanning: Ekstraksi Data Struk Otomatis melalui WhatsApp
+
+Terkadang, mencatat secara manual—bahkan lewat suara—bisa jadi melelahkan saat kita baru saja melakukan belanja mingguan yang berisi belasan item. Di sinilah fitur **Multimodal AI** dari **GoTEK** menjadi penyelamat: Cukup foto struk belanja Anda, kirim ke bot, dan biarkan AI yang mengerjakannya.
+
+Dalam artikel ini, kita akan membahas teknis integrasi gambar dengan **Gemini 2.0 Flash** untuk ekstraksi data struk belanja.
+
+---
+
+## 📸 Workflow Pemrosesan Gambar
+
+Saat pengguna mengirim gambar ke bot WhatsApp, urutan kegiatannya adalah sebagai berikut:
+
+1.  **Bot WhatsApp** menerima pesan media dan mengunduh filenya.
+2.  File diubah menjadi format **Base64** dan diteruskan ke API GoTEK melalui webhook.
+3.  **GoTEK API** mengirimkan data Base64 tersebut ke Gemini AI dengan instruksi khusus.
+4.  **Gemini AI** menganalisis piksel gambar, mengenali teks (OCR), dan memahami konteks finansialnya.
+5.  Data JSON berisi daftar barang dan harga dikirim kembali untuk disimpan di database.
+
+---
+
+## 🛠️ Implementasi: Multimodal Prompting
+
+Berbeda dengan pemrosesan teks, pemrosesan gambar (multimodal) membutuhkan pengiriman *buffer* data beserta instruksi yang sangat spesifik agar AI tidak "berhalusinasi".
+
+Berikut adalah cuplikan fungsi `parseTransactionFromImage` di GoTEK:
+
+```typescript
+const imagePart = {
+  inlineData: {
+    data: base64Image, // Data gambar dalam format base64
+    mimeType: "image/jpeg",
+  },
+};
+
+const prompt = `
+  Analisis foto struk berikut dan ekstrak SEMUA item transaksi persis sesuai struk.
+  
+  Aturan Ketat:
+  1. Setiap item barang/layanan harus menjadi list transaksi terpisah.
+  2. JANGAN masukkan elemen TOTAL, PAJAK, atau KEMBALIAN sebagai transaksi.
+  3. Gunakan kategori Bahasa Indonesia yang elegan (misal: "Kebutuhan Bulanan").
+`;
+
+const result = await model.generateContent([prompt, imagePart]);
+```
+
+---
+
+## 🧪 Mengatasi Tantangan: Gambar Buram & Konteks
+
+Dunia nyata penuh dengan tantangan: kamera yang buram, kertas struk yang lecek, atau pencahayaan yang kurang. Untuk menangani ini, saya menambahkan beberapa lapisan logika:
+
+-   **Caption Hint**: Pengguna bisa menambahkan teks saat mengirim foto (misal: "tadi belanja di Indomaret"). Teks ini dikirim ke AI sebagai petunjuk tambahan untuk meningkatkan akurasi.
+-   **Confidence Scoring**: AI diminta memberikan skor keyakinan (0.0 - 1.0) untuk setiap item yang dibacanya. Jika skor terlalu rendah, sistem akan menandai transaksi tersebut untuk ditinjau ulang oleh pengguna di dashboard.
+-   **Filtering**: Sistem secara otomatis memfilter baris yang bukan merupakan barang belanjaan, seperti alamat toko, nomor telepon, atau ucapan "Terima kasih".
+
+---
+
+## 📈 Mengapa Ini Penting?
+
+Fitur ini bukan sekadar *gimmick*. Bagi pengguna, ini adalah penghemat waktu yang signifikan. Mengonversi 10 item belanja dari struk kertas menjadi data digital biasanya membutuhkan waktu 2-3 menit. Dengan GoTEK, proses ini selesai dalam hitungan detik.
+
+Ini membuktikan bahwa integrasi AI di tempat yang tepat dapat menghapus hambatan kecil (friction) yang selama ini menghalangi orang untuk disiplin mengelola keuangan mereka.
+
+---
+*Siap membangun fitur serupa? Hubungi saya atau cek dokumentasi Gemini Multimodal.*

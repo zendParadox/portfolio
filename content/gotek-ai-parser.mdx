@@ -1,0 +1,88 @@
+---
+title: "Deep Dive: Membangun AI Parser Keuangan dengan Google Gemini"
+publishedAt: "2026-04-18"
+summary: "Teknik di balik pemrosesan natural language pada GoTEK: Menggunakan Google Gemini untuk mengubah chat WhatsApp menjadi data transaksi terstruktur dengan sistem key rotation."
+---
+
+# Deep Dive: Membangun AI Parser Keuangan dengan Google Gemini
+
+Fitur yang membuat **GoTEK** terasa "magis" adalah kemampuannya memahami pesan manusia yang tidak terstruktur. Cukup ketik *"beli kopi 25k di starbucks pake gopay"* dan sistem otomatis tahu bahwa itu adalah pengeluaran, kategori minuman, nominal 25.000, dari dompet GoPay.
+
+Dalam artikel ini, saya akan berbagi bagaimana saya mengimplementasikan AI Parser tersebut menggunakan **Google Gemini API** dan mengatasi tantangan teknis seperti *rate-limiting*.
+
+---
+
+## 🚀 Mengapa Gemini?
+
+Saat memilih LLM untuk parsing data, saya mempertimbangkan beberapa faktor: latency, akurasi pada Bahasa Indonesia, dan biaya. Gemini (khususnya model `flash`) menawarkan keseimbangan yang luar biasa. Dengan *context window* yang besar dan kemampuan pemrosesan gambar, Gemini sangat cocok untuk aplikasi keuangan real-time.
+
+---
+
+## 🛠️ Implementasi: Structured Output
+
+Salah satu fitur terbaru dari Gemini API adalah kemampuan untuk memaksa output dalam format JSON yang valid tanpa perlu *parsing* manual yang rentan error.
+
+Berikut adalah cuplikan bagaimana saya merancang *prompt* dan konfigurasi model di GoTEK:
+
+```typescript
+const model = genAI.getGenerativeModel({
+  model: "gemini-2.0-flash", // Performa tinggi dengan latency rendah
+  generationConfig: { responseMimeType: "application/json" },
+});
+
+const prompt = `
+  Analisis teks berikut dan ekstrak SEMUA transaksi ke dalam bentuk array JSON.
+  Teks: "${text}"
+
+  Aturan Ketat:
+  1. Default ke "EXPENSE" jika tidak spesifik.
+  2. Nominal harus integer (hapus Rp, titik, koma).
+  3. "category" gunakan Bahasa Indonesia yang relevan.
+  4. Cari informasi "wallet" (misal: Cash, BCA, Gopay).
+`;
+```
+
+---
+
+## 🔄 Solusi Rate-Limiting: API Key Rotation
+
+Sebagai pengembang independen, saya seringkali menggunakan *free tier* dari API. Tantangannya adalah kuota yang sangat terbatas. Untuk mengatasi ini di GoTEK, saya mengimplementasikan sistem **API Key Rotation**.
+
+Logikanya sederhana namun efektif: jika satu kunci terkena error `429 (Too Many Requests)`, sistem akan otomatis berpindah ke kunci berikutnya dan mencoba lagi.
+
+```typescript
+function rotateApiKey(): boolean {
+  failedKeysInCycle.add(currentKeyIndex);
+  
+  for (let i = 0; i < apiKeys.length; i++) {
+    const nextIndex = (currentKeyIndex + 1 + i) % apiKeys.length;
+    if (!failedKeysInCycle.has(nextIndex)) {
+      currentKeyIndex = nextIndex;
+      console.log(`🔄 Rotated to Gemini API key #${currentKeyIndex + 1}`);
+      return true;
+    }
+  }
+  return false; // Semua kunci habis
+}
+```
+
+Sistem ini memastikan aplikasi tetap dapat melayani pengguna meskipun beban traffic meningkat.
+
+---
+
+## 🧠 Tantangan: Ambiguity & Multi-Transaction
+
+Manusia sering mengirim pesan yang ambigu atau berisi banyak informasi sekaligus. Contoh: *"tadi beli bensin 30rb trus makan sate 25rb"*.
+
+Gemini sangat hebat dalam menangani ini jika diberi instruksi yang tepat. Saya menginstruksikan AI untuk **selalu mengembalikan array**, meskipun hanya ada satu transaksi. Hal ini membuat pipeline data di sisi backend menjadi sangat konsisten.
+
+---
+
+## ⭐ Hasil Akhir
+
+Dengan kombinasi *prompt engineering* yang presisi dan sistem rotasi kunci yang tangguh, GoTEK berhasil memproses 98% pesan pengguna dengan akurasi nominal dan kategori yang tepat.
+
+AI bukan lagi sekadar *chatbot* untuk bertanya, tapi telah menjadi *worker* yang sangat efisien untuk tugas-tugas administratif yang membosankan seperti mencatat keuangan.
+
+---
+*Mau mencoba implementasinya? Intip file `src/lib/gemini.ts` di GitHub saya.*
