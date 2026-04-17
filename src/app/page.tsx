@@ -17,6 +17,7 @@ import { ArrowUpRight } from "lucide-react";
 const BLUR_FADE_DELAY = 0.04;
 
 export default function Page() {
+  const date = new Date();
   return (
     <main className="min-h-[100dvh] w-full pt-20 pb-32 overflow-hidden selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black">
       {/* 
@@ -338,7 +339,7 @@ export default function Page() {
 
       <div className="py-20 rotate-[1deg] bg-foreground text-background">
         <Marquee
-          text="RAFI RAMADHAN — PORTFOLIO 2024 — DESIGN & DEVELOPMENT"
+          text={`RAFLI RAMADHANI — PORTFOLIO ${date.getFullYear().toString()} — DESIGN & DEVELOPMENT`}
           speed={30}
         />
       </div>

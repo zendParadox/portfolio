@@ -1,5 +1,6 @@
 import { Icons } from "@/components/icons";
 import { HomeIcon, NotebookIcon } from "lucide-react";
+import { calculateDate } from "@/utils/calculateDate";
 
 export const DATA = {
   name: "Rafli Ramadhani",
@@ -78,7 +79,7 @@ export const DATA = {
       title: "Fullstack Developer",
       logoUrl: "/bpjs-kesehatan.png",
       start: "Sep 2024",
-      end: "Present (1.3 Years)",
+      end: calculateDate("2024-09-01"),
       description:
         "At BPJS Kesehatan, I worked as a Fullstack Developer responsible for building and enhancing internal accounting and actuarial systems. I developed responsive user interfaces using Angular 18, implemented scalable microservices with .NET Core, optimized system performance, and strengthened application security. I collaborated closely with cross-functional teams to ensure smooth integration, accurate data flow, and alignment with business needs.",
     },
